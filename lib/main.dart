@@ -242,6 +242,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                 child: const CircularProgressIndicator(),
               ),
             if (statusConexao == StatusConexao.desconectado) _buildConexao(),
+            if (statusConexao == StatusConexao.conectado) _buildDesconexao(),
           ]),
     );
   }
@@ -321,8 +322,14 @@ class _DeviceScreenState extends State<DeviceScreen> {
     });
   }
 
+  Future<void> _desconectar() async {
+    await _socket?.close();
+  }
+
   Future<void> _tarar() async {
-    _enviarComando(Comandos.tarar);
+    _socket?.close();
+
+    //_enviarComando(Comandos.tarar);
   }
 
   Future<void> _zerar() async {
@@ -421,6 +428,16 @@ class _DeviceScreenState extends State<DeviceScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  _buildDesconexao() {
+    return ElevatedButton(
+      onPressed: _desconectar,
+      child: Text(
+        'Desconectar',
+        style: TextStyle(fontSize: _fonteSizeTara),
+      ),
     );
   }
 
